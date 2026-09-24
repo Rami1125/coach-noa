@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Copy, Check, Edit3, Send, Sparkles, Terminal } from "lucide-react";
+import { VoicePlayer } from "./VoicePlayer";
 
 interface PromptCardProps {
   promptText: string;
@@ -73,6 +74,8 @@ export const PromptCard: React.FC<PromptCardProps> = ({
 
         {/* Action Buttons: Touch-friendly (min 44px on mobile) */}
         <div className="flex items-center gap-1.5">
+          <VoicePlayer rawText={promptText} variant="icon" />
+
           {onEditPrompt && (
             <button
               onClick={() => onEditPrompt(promptText)}

@@ -35,7 +35,9 @@ import {
   Eye,
   FileText,
   Building2,
-  Check
+  Check,
+  Smartphone,
+  Volume2
 } from "lucide-react";
 import { InstallPromptBanner } from "../../components/pwa/InstallPromptBanner";
 import { DeviceProfileSwitcher } from "../../components/theme/DeviceProfileSwitcher";
@@ -154,26 +156,62 @@ export default function PortalPage({ onNavigate }: PortalPageProps) {
             </div>
 
             {/* Launch CTA */}
-            <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
+            <div className="flex flex-col sm:flex-row lg:flex-col gap-2.5 shrink-0">
+              <button
+                onClick={() => navigateTo("/chat")}
+                className="flex items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-900 hover:from-blue-600 hover:to-indigo-600 text-white px-7 py-3.5 text-base sm:text-lg font-black shadow-xl shadow-blue-950/40 hover:shadow-blue-900/60 transition-all active:scale-95 min-h-[54px] text-center border-2 border-blue-400/30"
+              >
+                <Smartphone className="h-5 w-5 text-amber-300" />
+                <span>📱 צ'אט חי סמסונג שטח & Firestore</span>
+              </button>
+
               <a
                 href="https://ai-chat-noa.vercel.app/chat"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white px-8 py-4 text-lg font-bold shadow-xl shadow-orange-600/30 hover:shadow-orange-600/50 transition-all active:scale-95 min-h-[56px] text-center"
+                className="flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white px-6 py-3 text-sm font-bold shadow-lg shadow-orange-600/25 transition-all active:scale-95 min-h-[46px] text-center"
               >
-                <span>🚀 שיגור ישיר: כניסה לצ'אט נועה (חי)</span>
-                <ExternalLink className="h-5 w-5" />
+                <span>🌐 שער Vercel רשמי</span>
+                <ExternalLink className="h-4 w-4" />
               </a>
 
-              <p className="text-xs text-center text-slate-400 font-medium">
-                קישור מוגן ומאובטח: ai-chat-noa.vercel.app/chat
+              <p className="text-[11px] text-center text-slate-400 font-medium">
+                תת-קולקציה: user_0508860896_active • צלצול כפול Web Audio Chime
               </p>
             </div>
           </div>
         </div>
 
         {/* Action Gateways Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Card 0: Realtime Chat on Samsung Note / S22 Ultra */}
+          <div
+            onClick={() => navigateTo("/chat")}
+            className="group relative cursor-pointer overflow-hidden rounded-2xl border-2 border-blue-200 bg-white p-5 shadow-sm hover:border-blue-600 hover:shadow-lg transition-all"
+          >
+            <div className="flex items-start justify-between">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100 text-blue-700 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <Smartphone className="h-6 w-6" />
+              </div>
+              <span className="rounded-full bg-blue-100 px-2.5 py-1 text-[11px] font-bold text-blue-800">
+                סמסונג שטח
+              </span>
+            </div>
+
+            <div className="mt-3.5 space-y-1">
+              <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                צ'אט שטח חי (Firestore)
+              </h3>
+              <p className="text-xs text-slate-600 leading-normal">
+                האזנה חיה (`onSnapshot`), צלצול התראה כפול, טיפוגרפיה 18px לקריאה בשמש וכפתורי מגע 50px+.
+              </p>
+            </div>
+
+            <div className="mt-4 flex items-center gap-1.5 text-xs font-bold text-blue-600">
+              <span>פתח שידור שטח</span>
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" />
+            </div>
+          </div>
           {/* Card 1: AI Coach Studio */}
           <div
             onClick={() => navigateTo("/coach")}

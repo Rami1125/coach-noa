@@ -1,14 +1,14 @@
 {
-  "id": "/",
-  "name": "נועה AI | סבן חומרי בניין",
-  "short_name": "נועה AI סבן",
+  "id": "/chat",
+  "name": "נועה AI | ח. סבן חומרי בניין",
+  "short_name": "נועה סבן",
   "description": "מערכת תפעול, מאמן לוגיסטי וסידור עבודה - ח. סבן חומרי בניין (1994) בע״מ",
-  "start_url": "/portal",
+  "start_url": "/chat",
   "scope": "/",
   "display": "standalone",
-  "orientation": "any",
-  "theme_color": "#EA580C",
-  "background_color": "#0F172A",
+  "orientation": "portrait",
+  "theme_color": "#1e3a8a",
+  "background_color": "#f8fafc",
   "categories": ["business", "productivity", "utilities"],
   "icons": [
     {

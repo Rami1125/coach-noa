@@ -20,11 +20,14 @@ import {
   UserCheck,
   ExternalLink,
   Layers,
-  Package
+  Package,
+  Smartphone
 } from "lucide-react";
 import { PromptCard } from "../../components/coach/PromptCard";
 import { MirrorCard } from "../../components/coach/MirrorCard";
 import { QuizCard, extractQuizFromText } from "../../components/coach/QuizCard";
+import { VoicePlayer } from "../../components/coach/VoicePlayer";
+import { MarkdownRenderer } from "../../components/coach/MarkdownRenderer";
 import { DeviceProfileSwitcher } from "../../components/theme/DeviceProfileSwitcher";
 import { useDeviceTheme } from "../../lib/device-theme-context";
 import { loadContinuousConversation, saveContinuousConversation } from "../../lib/conversation-sync";
@@ -93,7 +96,11 @@ export default function CoachStudioPage() {
 4. אפיק **מפת דרכים תמציתית (Roadmap)** עם אומדן זמנים סביר והגיוני להשלמה.
 5. אנפק **כרטיס פקודה סופי מלוטש (Master Prompt)** מוכן להעתקה מיידית.
 
-בחר באחד מכפתורי החידוד המהירים למטה, או כתוב לי מה עומד על הפרק בסידור העבודה.`,
+בחר באחד מכפתורי החידוד המהירים למטה, או כתוב לי מה עומד על הפרק בסידור העבודה.
+
+<<<VOICE_SCRIPT>>>
+ראמי, שלום. אני המאמן הלוגיסטי של סבן. תפקידי לחדד איתך שיבוצים והחלטות תפעוליות, להציג חלופות חינמיות, ולייצר פקודות מאסטר מדויקות. מה עומד על הפרק בסידור העבודה היום?
+<<<END_VOICE_SCRIPT>>>`,
       timestamp: new Date().toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit" })
     }
   ]);
@@ -367,6 +374,15 @@ export default function CoachStudioPage() {
           {/* Right Action Tools */}
           <div className="flex items-center gap-2">
             <a
+              href="/chat"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-extrabold shadow-xs transition"
+              title="צ'אט שטח חי לסמסונג S22 Ultra ו-Firestore"
+            >
+              <Smartphone className="w-3.5 h-3.5 text-amber-300" />
+              <span>📱 צ'אט שטח</span>
+            </a>
+
+            <a
               href="https://ai-chat-noa.vercel.app/chat"
               target="_blank"
               rel="noopener noreferrer"
@@ -488,21 +504,24 @@ export default function CoachStudioPage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2 text-slate-400 text-[11px]">
-                      {message.isStreaming && (
+                      {message.isStreaming ? (
                         <span className="flex items-center gap-1 text-amber-600 font-bold animate-pulse">
                           <span className="w-2 h-2 rounded-full bg-amber-500"></span>
                           מנתח ומעצב פקודה...
                         </span>
+                      ) : (
+                        <VoicePlayer
+                          rawText={message.content}
+                          voiceScript={parsed.voiceScript || undefined}
+                        />
                       )}
                       <span>{message.timestamp}</span>
                     </div>
                   </div>
 
-                  {/* Intro/Insight Content (Formatted text) */}
+                  {/* Intro/Insight Content (Formatted text with machine tags stripped) */}
                   {parsed.introText ? (
-                    <div className="prose prose-slate max-w-none text-xs sm:text-sm text-slate-800 leading-relaxed whitespace-pre-wrap mb-3 font-normal">
-                      {parsed.introText}
-                    </div>
+                    <MarkdownRenderer content={parsed.introText} className="mb-3" />
                   ) : message.isStreaming ? (
                     <div className="flex items-center gap-2 text-slate-400 text-xs py-2">
                       <RefreshCw className="w-4 h-4 animate-spin text-amber-500" />

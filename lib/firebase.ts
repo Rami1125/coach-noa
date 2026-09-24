@@ -13,6 +13,9 @@ import {
   orderBy, 
   limit, 
   serverTimestamp,
+  onSnapshot,
+  doc,
+  setDoc,
   type Firestore
 } from "firebase/firestore";
 
@@ -35,5 +38,8 @@ export {
   query, 
   orderBy, 
   limit, 
-  serverTimestamp 
+  serverTimestamp,
+  onSnapshot,
+  doc,
+  setDoc
 };

@@ -12,18 +12,26 @@ export interface ParsedCoachResponse {
     perfectOutcome: string;
   } | null;
   prompt: string | null;
+  voiceScript: string | null;
   outroText: string;
 }
 
 export function parseCoachResponse(text: string): ParsedCoachResponse {
   if (!text) {
-    return { introText: "", mirror: null, prompt: null, outroText: "" };
+    return { introText: "", mirror: null, prompt: null, voiceScript: null, outroText: "" };
   }
 
   let introText = text;
   let outroText = "";
   let mirror = null;
   let prompt = null;
+  let voiceScript = null;
+
+  // Extract <<<VOICE_SCRIPT>>> ... <<<END_VOICE_SCRIPT>>>
+  const voiceMatch = text.match(/<<<VOICE_SCRIPT>>>([\s\S]*?)(?:<<<END_VOICE_SCRIPT>>>|$)/i);
+  if (voiceMatch) {
+    voiceScript = voiceMatch[1].trim();
+  }
 
   // Extract :::mirror ... :::
   const mirrorMatch = text.match(/:::mirror([\s\S]*?)(:::|$)/);
@@ -51,10 +59,12 @@ export function parseCoachResponse(text: string): ParsedCoachResponse {
   }
 
   // Clean intro and outro by removing the special tags
-  // Replace mirror block with empty or clean space
+  // Replace machine blocks with clean space
   let cleanText = text
-    .replace(/:::mirror[\s\S]*?(:::|$)/g, "")
-    .replace(/:::prompt[\s\S]*?(:::|$)/g, "")
+    .replace(/<<<VOICE_SCRIPT>>>[\s\S]*?(?:<<<END_VOICE_SCRIPT>>>|$)/gi, "")
+    .replace(/:::mirror[\s\S]*?(?::::|$)/g, "")
+    .replace(/:::prompt[\s\S]*?(?::::|$)/g, "")
+    .replace(/:::quiz[\s\S]*?(?::::|$)/g, "")
     .trim();
 
   // Split into intro (before the removed blocks) and outro if needed
@@ -64,6 +74,7 @@ export function parseCoachResponse(text: string): ParsedCoachResponse {
     introText,
     mirror,
     prompt,
+    voiceScript,
     outroText,
   };
 }

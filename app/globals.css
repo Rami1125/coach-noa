@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+/**
+ * SabanOS - Samsung Galaxy S22 Ultra & Note Outdoor Styling Specifications
+ * Viewport: 384x824px - 412x915px (6.8", 19.3:9 ratio, S-Pen & Outdoor Visibility)
+ * ח. סבן חומרי בניין (1994) בע״מ
+ */
+
+:root {
+  --chat-font-size: 0.95rem;
+  --chat-line-height: 1.6;
+  --touch-target-min: 44px;
+  --saban-blue: #1e3a8a;
+  --saban-orange: #ea580c;
+}
+
+/* Dedicated Samsung Galaxy S22 Ultra / Note 6.8" Screen Optimization */
+@media screen and (max-width: 430px) {
+  :root {
+    --chat-font-size: 1.125rem; /* 18px מוגדל */
+    --chat-line-height: 1.75;
+    --touch-target-min: 50px;
+  }
+
+  body {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Samsung S-Pen & Finger Touch Targets */
+  .samsung-touch-target {
+    min-height: 50px !important;
+    min-width: 50px !important;
+  }
+
+  .samsung-chat-text {
+    font-size: var(--chat-font-size) !important;
+    line-height: var(--chat-line-height) !important;
+  }
+}
+
+/* High Contrast Outdoor Mode (שמש ישירה בחצר סבן) */
+.outdoor-contrast {
+  color: #0f172a !important; /* Slate 900 ultra-dark */
+  font-weight: 700 !important;
+}
+
+.outdoor-card {
+  background-color: #ffffff !important;
+  border-width: 2px !important;
+  border-color: #cbd5e1 !important; /* slate-300 */
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !important;
+}
+
+.outdoor-card:hover,
+.outdoor-card:focus-within {
+  border-color: #ea580c !important; /* saban orange focus */
+}
+
+/* S-Pen Precision Pointer Support */
+@media (pointer: fine) {
+  .spen-interactive:hover {
+    transform: translateY(-1px);
+    transition: transform 0.15s ease-out;
+  }
+}
+
+/* Smooth Fade In Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

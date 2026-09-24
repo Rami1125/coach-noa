@@ -8,6 +8,7 @@ import GuidePage from "../app/guide/page";
 import CoachStudioPage from "../app/coach/page";
 import PortalPage from "../app/portal/page";
 import CatalogStudioPage from "../app/catalog-studio/page";
+import ChatPage from "../app/chat/page";
 import { DeviceThemeProvider } from "../lib/device-theme-context";
 import { InstallPromptBanner } from "../components/pwa/InstallPromptBanner";
 
@@ -40,6 +41,8 @@ export default function App() {
 
   const renderContent = () => {
     switch (currentPath) {
+      case "/chat":
+        return <ChatPage onNavigate={navigateTo} />;
       case "/coach":
         return <CoachStudioPage />;
       case "/catalog-studio":
