@@ -1,0 +1,6 @@
+{
+  "name": "Noa AI Coach & Interactive Guide",
+  "description": "מודול מאמן ומשוב אוטונומי ומדריך אינטראקטיבי למערכת נועה AI - ח. סבן חומרי בניין (1994) בע״מ",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
