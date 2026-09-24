@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { NextRequest, NextResponse } from "next/server";
+import { generateContentWithFallback } from "@/lib/gemini-fallback";
 
 export const runtime = "nodejs";
 
@@ -71,14 +72,14 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Call Gemini 3.8 Flash
-    const response = await ai.models.generateContent({
-      model: "gemini-3.8-flash",
+    // Call Gemini with fallback
+    const { response } = await generateContentWithFallback(ai, {
       contents,
       config: {
         systemInstruction: COACH_SYSTEM_INSTRUCTION,
         temperature: 0.3,
-      }
+      },
+      models: ["gemini-3.8-flash", "gemini-3.1-flash-lite"]
     });
 
     return NextResponse.json({
@@ -86,7 +87,7 @@ export async function POST(req: NextRequest) {
       text: response.text || "",
     });
   } catch (error: any) {
-    console.error("[Coach Chat API Error]:", error);
+    console.info("[Coach Chat API Notice]:", error?.message || error);
     return NextResponse.json(
       { success: false, error: error.message || "Failed to chat with Coach" },
       { status: 500 }

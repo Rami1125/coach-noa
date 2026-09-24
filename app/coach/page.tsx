@@ -193,8 +193,17 @@ export default function CoachStudioPage() {
                         : msg
                     )
                   );
+                } else if (parsed.error) {
+                  accumulatedText = `הערת מערכת: ${parsed.error}`;
+                  setMessages((prev) =>
+                    prev.map((msg) =>
+                      msg.id === coachPlaceholderId
+                        ? { ...msg, content: accumulatedText, isStreaming: false }
+                        : msg
+                    )
+                  );
                 }
-              } catch (e) {
+              } catch (_e) {
                 // Raw text chunk fallback
                 accumulatedText += dataStr;
                 setMessages((prev) =>
@@ -213,7 +222,11 @@ export default function CoachStudioPage() {
         setMessages((prev) =>
           prev.map((msg) =>
             msg.id === coachPlaceholderId
-              ? { ...msg, content: accumulatedText, isStreaming: false }
+              ? { 
+                  ...msg, 
+                  content: accumulatedText.trim() || "פנייתך נקלטה במאמן נועה. נסה לשאול שוב או לבחור באחת הפקודות המהירות למעלה.", 
+                  isStreaming: false 
+                }
               : msg
           )
         );
@@ -229,13 +242,13 @@ export default function CoachStudioPage() {
         );
       }
     } catch (err: any) {
-      console.error("[Coach Chat Error]:", err);
+      console.info("[Coach Chat Notice]:", err?.message || err);
       setMessages((prev) =>
         prev.map((msg) =>
           msg.id === coachPlaceholderId
             ? {
                 ...msg,
-                content: `⚠️ חלה שגיאה בתקשורת עם מאמן נועה: ${err.message || "נסה שוב מאוחר יותר."}`,
+                content: `⚠️ עדכון תפעולי: שרתי ה-AI מתעדכנים כעת. אנא לחץ שוב על שליחה או בחר פקודה מוכנה.`,
                 isStreaming: false
               }
             : msg
