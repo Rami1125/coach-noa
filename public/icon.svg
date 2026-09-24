@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="50%" stop-color="#1E293B" />
+      <stop offset="100%" stop-color="#090D16" />
+    </linearGradient>
+    <linearGradient id="sabanOrange" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FB923C" />
+      <stop offset="50%" stop-color="#EA580C" />
+      <stop offset="100%" stop-color="#C2410C" />
+    </linearGradient>
+    <linearGradient id="goldAcc" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FCD34D" />
+      <stop offset="100%" stop-color="#F59E0B" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background rounded squircle with margin for maskable safe-zone -->
+  <rect width="512" height="512" fill="url(#bg)" />
+
+  <g filter="url(#shadow)" transform="translate(256, 235) scale(0.9) translate(-256, -235)">
+    <!-- Industrial Hexagonal Badge -->
+    <polygon points="256,40 430,140 430,340 256,440 82,340 82,140" fill="#1E293B" stroke="url(#sabanOrange)" stroke-width="12" stroke-linejoin="round" />
+    
+    <!-- Central Logistics Crane & AI Node -->
+    <!-- Tower Mast -->
+    <rect x="244" y="160" width="24" height="200" rx="4" fill="#E2E8F0" />
+    <!-- Lattice X crossbars -->
+    <path d="M244,190 L268,220 M268,190 L244,220 M244,250 L268,280 M268,250 L244,280 M244,310 L268,340 M268,310 L244,340" stroke="#94A3B8" stroke-width="4" stroke-linecap="round" />
+    
+    <!-- Crane Boom Jib -->
+    <path d="M120,160 L392,160 L370,142 L130,142 Z" fill="url(#sabanOrange)" />
+    <!-- Counter Jib & Weight -->
+    <rect x="110" y="148" width="40" height="24" rx="3" fill="#64748B" />
+    <!-- Cabin -->
+    <rect x="236" y="172" width="40" height="28" rx="4" fill="url(#goldAcc)" />
+    <!-- Cable & Hook -->
+    <path d="M340,160 L340,240" stroke="#F8FAFC" stroke-width="4" stroke-dasharray="6,4" />
+    <path d="M332,240 L348,240 L348,252 A8,8 0 0,1 332,252 Z" fill="url(#goldAcc)" />
+
+    <!-- Palette Cargo block (Deposits: 60002 / 60060) -->
+    <rect x="318" y="258" width="44" height="34" rx="4" fill="url(#sabanOrange)" stroke="#FED7AA" stroke-width="3" />
+    <path d="M318,272 L362,272 M332,258 L332,292 M348,258 L348,292" stroke="#FFFFFF" stroke-width="2" opacity="0.6"/>
+
+    <!-- AI Sparkle Core -->
+    <circle cx="256" cy="115" r="14" fill="#38BDF8" />
+    <path d="M256,90 L256,140 M231,115 L281,115 M238,97 L274,133 M238,133 L274,97" stroke="#38BDF8" stroke-width="4" stroke-linecap="round" />
+  </g>
+
+  <!-- Hebrew Brand Text -->
+  <text x="256" y="475" text-anchor="middle" font-family="Assistant, Rubik, sans-serif" font-size="34" font-weight="800" fill="#F8FAFC" letter-spacing="2">נועה AI • סבן</text>
+</svg>

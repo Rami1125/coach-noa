@@ -6,18 +6,24 @@
 import React, { useState, useEffect } from "react";
 import GuidePage from "../app/guide/page";
 import CoachStudioPage from "../app/coach/page";
+import PortalPage from "../app/portal/page";
+import CatalogStudioPage from "../app/catalog-studio/page";
+import { DeviceThemeProvider } from "../lib/device-theme-context";
+import { InstallPromptBanner } from "../components/pwa/InstallPromptBanner";
 
 export default function App() {
   const [currentPath, setCurrentPath] = useState<string>(() => {
     if (typeof window !== "undefined") {
-      return window.location.pathname;
+      const path = window.location.pathname;
+      return path === "/" || !path ? "/portal" : path;
     }
-    return "/";
+    return "/portal";
   });
 
   useEffect(() => {
     const handlePopState = () => {
-      setCurrentPath(window.location.pathname);
+      const path = window.location.pathname;
+      setCurrentPath(path === "/" || !path ? "/portal" : path);
     };
 
     window.addEventListener("popstate", handlePopState);
@@ -28,13 +34,29 @@ export default function App() {
     if (typeof window !== "undefined") {
       window.history.pushState({}, "", path);
       setCurrentPath(path);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
-  if (currentPath === "/coach") {
-    return <CoachStudioPage />;
-  }
+  const renderContent = () => {
+    switch (currentPath) {
+      case "/coach":
+        return <CoachStudioPage />;
+      case "/catalog-studio":
+        return <CatalogStudioPage onNavigate={navigateTo} />;
+      case "/guide":
+        return <GuidePage onNavigateToCoach={() => navigateTo("/coach")} />;
+      case "/portal":
+      default:
+        return <PortalPage onNavigate={navigateTo} />;
+    }
+  };
 
-  return <GuidePage onNavigateToCoach={() => navigateTo("/coach")} />;
+  return (
+    <DeviceThemeProvider>
+      <InstallPromptBanner />
+      {renderContent()}
+    </DeviceThemeProvider>
+  );
 }
 

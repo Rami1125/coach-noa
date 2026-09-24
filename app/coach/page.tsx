@@ -17,10 +17,17 @@ import {
   CornerDownLeft,
   Building2,
   FileQuestion,
-  UserCheck
+  UserCheck,
+  ExternalLink,
+  Layers,
+  Package
 } from "lucide-react";
 import { PromptCard } from "../../components/coach/PromptCard";
 import { MirrorCard } from "../../components/coach/MirrorCard";
+import { QuizCard, extractQuizFromText } from "../../components/coach/QuizCard";
+import { DeviceProfileSwitcher } from "../../components/theme/DeviceProfileSwitcher";
+import { useDeviceTheme } from "../../lib/device-theme-context";
+import { loadContinuousConversation, saveContinuousConversation } from "../../lib/conversation-sync";
 import { parseCoachResponse } from "../../src/lib/coach-parser";
 
 interface ChatMessage {
@@ -71,17 +78,20 @@ const QUICK_PROMPTS = [
 ];
 
 export default function CoachStudioPage() {
+  const { isMobile, isSamsung } = useDeviceTheme();
+
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "welcome-1",
       role: "coach",
-      content: `שלום ראמי! אני **המאמן הלוגיסטי ומהנדס ה-Prompt של ח. סבן חומרי בניין (1994) בע״מ** 🧠.
+      content: `שלום ראמי! אני **המאמן הלוגיסטי, מהנדס ה-Prompt והארכיטקט האסטרטגי של ח. סבן חומרי בניין (1994) בע״מ** 🧠.
 
 תפקידי לשמש כ**משקפת תפעולית (The Operational Mirror)** עבורך:
-1. נקשיב למה שאתה רוצה לתאם או ללמד את נועה.
-2. אחדד מולך בשאלות מנחות מה חסר (סוג פריקה, משקלים, נהג, פקדונות).
-3. אציג לך בזמן אמת השוואה של "איך נועה עלולה לטעות בניסוח חופשי ⬅️ איך לנסח במדויק לפי ה-DNA של סבן".
-4. אנפק לך **כרטיס פקודה סופי מלוטש (Master Prompt)** להעתקה בלחיצה אחת.
+1. נקשיב לכל רעיון, שיבוץ מורכב או כלל חדש שתרצה לפתח עבור נועה.
+2. אציג תמיד **3 חלופות מימוש חינמיות (Zero-Cost Alternatives)** ללא עלויות ענן נוספות.
+3. אייצר עבורך **שאלון אמריקאי אינטראקטיבי בלחיצה אחת** לחידוד ההחלטה במינימום מאמץ.
+4. אפיק **מפת דרכים תמציתית (Roadmap)** עם אומדן זמנים סביר והגיוני להשלמה.
+5. אנפק **כרטיס פקודה סופי מלוטש (Master Prompt)** מוכן להעתקה מיידית.
 
 בחר באחד מכפתורי החידוד המהירים למטה, או כתוב לי מה עומד על הפרק בסידור העבודה.`,
       timestamp: new Date().toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit" })
@@ -94,6 +104,47 @@ export default function CoachStudioPage() {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Load continuous multi-device conversation thread (Desktop <-> Samsung)
+  useEffect(() => {
+    async function initContinuousThread() {
+      try {
+        const stored = await loadContinuousConversation();
+        if (stored && stored.length > 0) {
+          setMessages(
+            stored.map((s) => ({
+              id: s.id,
+              role: s.sender === "user" ? "user" : "coach",
+              content: s.text,
+              timestamp: new Date(s.timestamp).toLocaleTimeString("he-IL", {
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
+            }))
+          );
+        }
+      } catch (_e) {
+        // use default state
+      }
+    }
+    initContinuousThread();
+  }, []);
+
+  // Save continuous multi-device conversation thread
+  useEffect(() => {
+    if (messages.length > 1) {
+      saveContinuousConversation(
+        messages.map((m) => ({
+          id: m.id,
+          sender: m.role === "user" ? "user" : "coach",
+          text: m.content,
+          timestamp: new Date().toISOString(),
+          deviceType: isSamsung ? "samsung-mobile" : "desktop",
+        })),
+        isSamsung ? "samsung-mobile" : "desktop"
+      );
+    }
+  }, [messages, isSamsung]);
 
   // Auto-scroll to bottom of messages
   const scrollToBottom = () => {
@@ -315,28 +366,44 @@ export default function CoachStudioPage() {
 
           {/* Right Action Tools */}
           <div className="flex items-center gap-2">
-            <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span className="font-bold">Gemini 3.8 Flash • משקפת פעילה</span>
-            </div>
+            <a
+              href="https://ai-chat-noa.vercel.app/chat"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white text-xs font-bold shadow-xs transition"
+            >
+              <span>🚀 צ'אט חי</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+
+            <a
+              href="/portal"
+              className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-all flex items-center gap-1.5 border border-slate-200"
+              title="חזרה למסוף השער"
+            >
+              <Building2 className="w-3.5 h-3.5 text-orange-600" />
+              <span>מסוף השער</span>
+            </a>
+
+            <a
+              href="/catalog-studio"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-800 text-xs font-bold transition-all border border-blue-200"
+              title="סטודיו מילון לוגיסטי ומוצרים"
+            >
+              <Package className="w-3.5 h-3.5 text-blue-600" />
+              <span>קטלוג</span>
+            </a>
 
             <button
               onClick={handleClearChat}
-              className="p-2 sm:px-3 sm:py-1.5 rounded-xl text-slate-500 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 text-xs font-bold transition-all flex items-center gap-1.5"
+              className="p-2 sm:px-2.5 sm:py-1.5 rounded-xl text-slate-500 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 text-xs font-bold transition-all flex items-center gap-1"
               title="נקה צ'אט"
             >
               <Trash2 className="w-4 h-4" />
-              <span className="hidden sm:inline">איפוס סשן</span>
+              <span className="hidden xl:inline">איפוס</span>
             </button>
 
-            <a
-              href="/"
-              className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all flex items-center gap-1.5 border border-slate-200"
-              title="חזרה למדריך הראשי"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">חזרה למדריך</span>
-            </a>
+            <DeviceProfileSwitcher />
           </div>
 
         </div>
@@ -452,6 +519,25 @@ export default function CoachStudioPage() {
                       }}
                     />
                   )}
+
+                  {/* Multiple-Choice Interactive Quiz Card */}
+                  {(() => {
+                    const { quizzes } = extractQuizFromText(message.content);
+                    if (!quizzes || quizzes.length === 0) return null;
+                    return (
+                      <div className="space-y-3">
+                        {quizzes.map((quiz, qIdx) => (
+                          <QuizCard
+                            key={qIdx}
+                            quiz={quiz}
+                            onSelectAnswer={(question, answerText) => {
+                              handleSendMessage(`תשובתי לבחירת הדרך: ${question} ⬅️ ${answerText}`);
+                            }}
+                          />
+                        ))}
+                      </div>
+                    );
+                  })()}
 
                   {/* Final Master Prompt Box */}
                   {parsed.prompt && (
